@@ -6,6 +6,7 @@ import {
 } from "obsidian-daily-notes-interface";
 
 import type { ISettings } from "src/settings";
+import { LANG } from "src/lang";
 import { createConfirmationDialog } from "src/ui/modal";
 
 /**
@@ -27,16 +28,16 @@ export async function tryToCreateWeeklyNote(
       ? workspace.splitActiveLeaf()
       : workspace.getUnpinnedLeaf();
 
-    await leaf.openFile(dailyNote, { active : true });
+    await leaf.openFile(dailyNote, { active: true });
     cb?.(dailyNote);
   };
 
   if (settings.shouldConfirmBeforeCreate) {
     createConfirmationDialog({
-      cta: "Create",
+      cta: LANG.weeklyNote.create,
       onAccept: createFile,
-      text: `File ${filename} does not exist. Would you like to create it?`,
-      title: "New Weekly Note",
+      text: LANG.weeklyNote.fileNotExist(filename),
+      title: LANG.weeklyNote.newWeeklyNote,
     });
   } else {
     await createFile();

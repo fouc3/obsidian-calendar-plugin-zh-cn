@@ -1,7 +1,7 @@
 {
   "id": "calendar",
-  "name": "Calendar",
-  "description": "Calendar view of your daily notes",
+  "name": "日历",
+  "description": "日记笔记的日历视图",
   "version": "1.5.10",
   "author": "Liam Cain",
   "authorUrl": "https://github.com/liamcain/",

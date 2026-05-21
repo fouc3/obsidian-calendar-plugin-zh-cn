@@ -3,6 +3,7 @@ import { appHasDailyNotesPluginLoaded } from "obsidian-daily-notes-interface";
 import type { ILocaleOverride, IWeekStartOption } from "obsidian-calendar-ui";
 
 import { DEFAULT_WEEK_FORMAT, DEFAULT_WORDS_PER_DOT } from "src/constants";
+import { LANG } from "src/lang";
 
 import type CalendarPlugin from "./main";
 
@@ -64,18 +65,17 @@ export class CalendarSettingsTab extends PluginSettingTab {
     if (!appHasDailyNotesPluginLoaded()) {
       this.containerEl.createDiv("settings-banner", (banner) => {
         banner.createEl("h3", {
-          text: "⚠️ Daily Notes plugin not enabled",
+          text: LANG.settings.dailyNotesNotEnabled,
         });
         banner.createEl("p", {
           cls: "setting-item-description",
-          text:
-            "The calendar is best used in conjunction with either the Daily Notes plugin or the Periodic Notes plugin (available in the Community Plugins catalog).",
+          text: LANG.settings.dailyNotesNotEnabledDesc,
         });
       });
     }
 
     this.containerEl.createEl("h3", {
-      text: "General Settings",
+      text: LANG.settings.generalSettings,
     });
     this.addDotThresholdSetting();
     this.addWeekStartSetting();
@@ -87,12 +87,11 @@ export class CalendarSettingsTab extends PluginSettingTab {
       !appHasPeriodicNotesPluginLoaded()
     ) {
       this.containerEl.createEl("h3", {
-        text: "Weekly Note Settings",
+        text: LANG.settings.weeklyNoteSettings,
       });
       this.containerEl.createEl("p", {
         cls: "setting-item-description",
-        text:
-          "Note: Weekly Note settings are moving. You are encouraged to install the 'Periodic Notes' plugin to keep the functionality in the future.",
+        text: LANG.settings.weeklyNoteSettingsDesc,
       });
       this.addWeeklyNoteFormatSetting();
       this.addWeeklyNoteTemplateSetting();
@@ -100,15 +99,15 @@ export class CalendarSettingsTab extends PluginSettingTab {
     }
 
     this.containerEl.createEl("h3", {
-      text: "Advanced Settings",
+      text: LANG.settings.advancedSettings,
     });
     this.addLocaleOverrideSetting();
   }
 
   addDotThresholdSetting(): void {
     new Setting(this.containerEl)
-      .setName("Words per dot")
-      .setDesc("How many words should be represented by a single dot?")
+      .setName(LANG.settings.wordsPerDot)
+      .setDesc(LANG.settings.wordsPerDotDesc)
       .addText((textfield) => {
         textfield.setPlaceholder(String(DEFAULT_WORDS_PER_DOT));
         textfield.inputEl.type = "number";
@@ -129,12 +128,13 @@ export class CalendarSettingsTab extends PluginSettingTab {
     const localeWeekStart = moment.weekdays()[localeWeekStartNum];
 
     new Setting(this.containerEl)
-      .setName("Start week on:")
-      .setDesc(
-        "Choose what day of the week to start. Select 'Locale default' to use the default specified by moment.js"
-      )
+      .setName(LANG.settings.startWeekOn)
+      .setDesc(LANG.settings.startWeekOnDesc)
       .addDropdown((dropdown) => {
-        dropdown.addOption("locale", `Locale default (${localeWeekStart})`);
+        dropdown.addOption(
+          "locale",
+          `${LANG.settings.localeDefault} (${localeWeekStart})`
+        );
         localizedWeekdays.forEach((day, i) => {
           dropdown.addOption(weekdays[i], day);
         });
@@ -149,8 +149,8 @@ export class CalendarSettingsTab extends PluginSettingTab {
 
   addConfirmCreateSetting(): void {
     new Setting(this.containerEl)
-      .setName("Confirm before creating new note")
-      .setDesc("Show a confirmation modal before creating a new note")
+      .setName(LANG.settings.confirmBeforeCreate)
+      .setDesc(LANG.settings.confirmBeforeCreateDesc)
       .addToggle((toggle) => {
         toggle.setValue(this.plugin.options.shouldConfirmBeforeCreate);
         toggle.onChange(async (value) => {
@@ -163,21 +163,21 @@ export class CalendarSettingsTab extends PluginSettingTab {
 
   addShowWeeklyNoteSetting(): void {
     new Setting(this.containerEl)
-      .setName("Show week number")
-      .setDesc("Enable this to add a column with the week number")
+      .setName(LANG.settings.showWeekNumber)
+      .setDesc(LANG.settings.showWeekNumberDesc)
       .addToggle((toggle) => {
         toggle.setValue(this.plugin.options.showWeeklyNote);
         toggle.onChange(async (value) => {
           this.plugin.writeOptions(() => ({ showWeeklyNote: value }));
-          this.display(); // show/hide weekly settings
+          this.display();
         });
       });
   }
 
   addWeeklyNoteFormatSetting(): void {
     new Setting(this.containerEl)
-      .setName("Weekly note format")
-      .setDesc("For more syntax help, refer to format reference")
+      .setName(LANG.settings.weeklyNoteFormat)
+      .setDesc(LANG.settings.weeklyNoteFormatDesc)
       .addText((textfield) => {
         textfield.setValue(this.plugin.options.weeklyNoteFormat);
         textfield.setPlaceholder(DEFAULT_WEEK_FORMAT);
@@ -189,10 +189,8 @@ export class CalendarSettingsTab extends PluginSettingTab {
 
   addWeeklyNoteTemplateSetting(): void {
     new Setting(this.containerEl)
-      .setName("Weekly note template")
-      .setDesc(
-        "Choose the file you want to use as the template for your weekly notes"
-      )
+      .setName(LANG.settings.weeklyNoteTemplate)
+      .setDesc(LANG.settings.weeklyNoteTemplateDesc)
       .addText((textfield) => {
         textfield.setValue(this.plugin.options.weeklyNoteTemplate);
         textfield.onChange(async (value) => {
@@ -203,8 +201,8 @@ export class CalendarSettingsTab extends PluginSettingTab {
 
   addWeeklyNoteFolderSetting(): void {
     new Setting(this.containerEl)
-      .setName("Weekly note folder")
-      .setDesc("New weekly notes will be placed here")
+      .setName(LANG.settings.weeklyNoteFolder)
+      .setDesc(LANG.settings.weeklyNoteFolderDesc)
       .addText((textfield) => {
         textfield.setValue(this.plugin.options.weeklyNoteFolder);
         textfield.onChange(async (value) => {
@@ -219,12 +217,13 @@ export class CalendarSettingsTab extends PluginSettingTab {
     const sysLocale = navigator.language?.toLowerCase();
 
     new Setting(this.containerEl)
-      .setName("Override locale:")
-      .setDesc(
-        "Set this if you want to use a locale different from the default"
-      )
+      .setName(LANG.settings.overrideLocale)
+      .setDesc(LANG.settings.overrideLocaleDesc)
       .addDropdown((dropdown) => {
-        dropdown.addOption("system-default", `Same as system (${sysLocale})`);
+        dropdown.addOption(
+          "system-default",
+          `${LANG.settings.sameAsSystem} (${sysLocale})`
+        );
         moment.locales().forEach((locale) => {
           dropdown.addOption(locale, locale);
         });

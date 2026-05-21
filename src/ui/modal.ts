@@ -1,5 +1,7 @@
 import { App, Modal } from "obsidian";
 
+import { LANG } from "src/lang";
+
 interface IConfirmationDialogParams {
   cta: string;
   // eslint-disable-next-line
@@ -19,7 +21,7 @@ export class ConfirmationModal extends Modal {
 
     this.contentEl.createDiv("modal-button-container", (buttonsEl) => {
       buttonsEl
-        .createEl("button", { text: "Never mind" })
+        .createEl("button", { text: LANG.modal.neverMind })
         .addEventListener("click", () => this.close());
 
       buttonsEl

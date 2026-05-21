@@ -10,6 +10,7 @@ import { FileView, TFile, ItemView, WorkspaceLeaf } from "obsidian";
 import { get } from "svelte/store";
 
 import { TRIGGER_ON_OPEN, VIEW_TYPE_CALENDAR } from "src/constants";
+import { LANG } from "src/lang";
 import { tryToCreateDailyNote } from "src/io/dailyNotes";
 import { tryToCreateWeeklyNote } from "src/io/weeklyNotes";
 import type { ISettings } from "src/settings";
@@ -74,7 +75,7 @@ export default class CalendarView extends ItemView {
   }
 
   getDisplayText(): string {
-    return "Calendar";
+    return LANG.view.calendar;
   }
 
   getIcon(): string {
